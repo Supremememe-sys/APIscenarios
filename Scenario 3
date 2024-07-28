@@ -1,0 +1,23 @@
+#Scenario 3
+#Store Owner delete the order from the first scenario 
+// Assume orderId is the one already within the system and to verify the functionality of delete API
+const orderId = 1234567890;
+
+// Send a DELETE request to delete the order
+pm.sendRequest({
+    url: `https://petstore.swagger.io/v2/store/order/${orderId}`, // Endpoint to delete the order
+    method: 'DELETE', // HTTP method
+    header: {
+        'Content-Type': 'application/json' // Header indicating the content type
+    }
+}, function (err, res) {
+    if (err) {
+        console.error('Error deleting order:', err); // Log any errors
+    } else {
+        // Expected response: Status code 200, indicating successful deletion
+        console.log('Order deleted successfully:', res); // Log the successful deletion
+        pm.test('Order deleted successfully', function () {
+            pm.expect(res.status).to.equal(200); // Check if the status code is 200
+        });
+    }
+});
