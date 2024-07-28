@@ -1,0 +1,92 @@
+#Scenario 5
+#Create a list of user and then delete
+const users = [
+  {
+    id: 1,
+    username: "jasonpet",
+    firstName: "Jason",
+    lastName: "pet",
+    email: "jasonpet@gmail.com",
+    password: "jasonpet123",
+    phone: "080-400-1234",
+    userStatus: 1
+  },
+  {
+    id: 2,
+    username: "rickpet",
+    firstName: "rick",
+    lastName: "pet",
+    email: "rickpet@gmail.com",
+    password: "rickpet123",
+    phone: "080-400-2345",
+    userStatus: 1
+  }
+];
+
+// Step 1: Create Multiple Users
+pm.sendRequest({
+  url: 'https://petstore.swagger.io/v2/user/createWithArray',
+  method: 'POST',
+  header: {
+    'Content-Type': 'application/json'
+  },
+  body: {
+    mode: 'raw',
+    raw: JSON.stringify(users)
+  }
+}, function (err, res) {
+  if (err) {
+    console.error('Error creating users:', err);
+    return;
+  }
+
+  // Expected response: Status code 200, JSON object confirming user creation
+  console.log('Users created successfully:', res.json());
+  pm.test('Users created successfully', function () {
+    pm.expect(res.status).to.equal(200);
+  });
+
+  // Step 2: Log In as Jason
+  pm.sendRequest({
+    url: 'https://petstore.swagger.io/v2/user/login',
+    method: 'GET',
+    header: {
+      'Content-Type': 'application/json'
+    },
+    params: {
+      username: users[0].username,
+      password: users[0].password
+    }
+  }, function (err, res) {
+    if (err) {
+      console.error('Error logging in:', err);
+      return;
+    }
+
+    // Expected response: Status code 200, JSON object confirming login
+    console.log('Logged in successfully as Jason:', res.json());
+    pm.test('Logged in successfully as Jason', function () {
+      pm.expect(res.status).to.equal(200);
+    });
+
+    // Step 3: Log Out
+    pm.sendRequest({
+      url: 'https://petstore.swagger.io/v2/user/logout',
+      method: 'GET',
+      header: {
+        'Content-Type': 'application/json'
+      }
+    }, function (err, res) {
+      if (err) {
+        console.error('Error logging out:', err);
+        return;
+      }
+
+      // Expected response: Status code 200, JSON object confirming logout
+      console.log('Logged out successfully:', res.json());
+      pm.test('Logged out successfully', function () {
+        pm.expect(res.status).to.equal(200);
+      });
+    });
+  });
+});
