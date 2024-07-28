@@ -1,0 +1,76 @@
+#Scenario 2
+#Store Owner can update the pet information of pets named 'kurikuri' under category 'Pomeranian' to add the tag 'Super Cute'
+// Define the pet name and category to search for
+const petNameToFind = 'kurikuri';
+const categoryToFind = 'Pomeranian';
+const newTag = 'Super Cute';
+
+// Send a GET request to fetch available pets
+pm.sendRequest({
+    url: 'https://petstore.swagger.io/v2/pet/findByStatus',
+    method: 'GET',
+    header: {
+        'Content-Type': 'application/json'
+    },
+    params: {
+        status: 'available'
+    }
+}, function (err, res) {
+    if (err) {
+        console.error('Error fetching pets:', err);
+        return;
+    }
+
+    // Expected response: Status code 200, JSON array of available pets
+    const response = res.json(); // Parse the JSON response
+
+    // Filter the response to find pets with the specified name and category
+    const petsNamedKurikuriInCategoryPomeranian = response.filter(pet => 
+        pet.name.toLowerCase() === petNameToFind.toLowerCase() && 
+        pet.category.name.toLowerCase() === categoryToFind.toLowerCase()
+    );
+
+    // Log the filtered pets to the Postman console for debugging
+    console.log(`Available pets named '${petNameToFind}' in category '${categoryToFind}':`, petsNamedKurikuriInCategoryPomeranian);
+
+    // Check if any pets were found
+    if (petsNamedKurikuriInCategoryPomeranian.length > 0) {
+        // Iterate over each matching pet to update its information
+        petsNamedKurikuriInCategoryPomeranian.forEach(pet => {
+            // Add the new tag to the pet's tags array
+            if (!pet.tags) {
+                pet.tags = [];
+            }
+            pet.tags.push({ id: pet.tags.length + 1, name: newTag });
+
+            // Send a PUT request to update the pet information
+            pm.sendRequest({
+                url: 'https://petstore.swagger.io/v2/pet', // Endpoint to update pet information
+                method: 'PUT', // HTTP method
+                header: {
+                    'Content-Type': 'application/json' // Header indicating the content type
+                },
+                body: {
+                    mode: 'raw', // Body mode
+                    raw: JSON.stringify(pet) // Updated pet information in JSON format
+                }
+            }, function (err, res) {
+                if (err) {
+                    console.error('Error updating pet information:', err); // Log any errors
+                } else {
+                    // Expected response: Status code 200, JSON object representing the updated pet information
+                    console.log('Pet information updated successfully for pet ID:', pet.id, res.json()); // Log the successful update
+                    pm.test('Pet information updated successfully', function () {
+                        pm.expect(res.status).to.equal(200); // Check if the status code is 200
+                    });
+                }
+            });
+        });
+    } else {
+        // Log a message if no matching pets were found
+        console.log(`No available pets named '${petNameToFind}' in category '${categoryToFind}' found.`);
+        pm.test(`No available pets named '${petNameToFind}' in category '${categoryToFind}' found.`, function () {
+            pm.expect(petsNamedKurikuriInCategoryPomeranian.length).to.be.above(0); // Test to ensure no pets were found
+        });
+    }
+});
