@@ -1,1 +1,92 @@
 #Scenario 6
+#Add new pet named 'cute' and category named 'gelato' to the store and then upload image of it
+#Finally, delete this pet information
+
+const pet = {
+  id: 0,
+  category: {
+    id: 0,
+    name: "gelato"
+  },
+  name: "cute",
+  photoUrls: [],
+  tags: [],
+  status: "available"
+};
+
+//POST Request - add new pet
+pm.sendRequest({
+  url: 'https://petstore.swagger.io/v2/pet',
+  method: 'POST',
+  header: {
+    'Content-Type': 'application/json'
+  },
+  body: {
+    mode: 'raw',
+    raw: JSON.stringify(pet)
+  }
+}, function (err, res) {
+  if (err) {
+    console.error('Error adding pet:', err);
+    return;
+  }
+
+  // Expected response: Status code 200, JSON object confirming pet creation
+  const petResponse = res.json(); // Parse the JSON response
+  const petId = petResponse.id; // Capture the pet ID
+  console.log('Pet added successfully:', petResponse); // Log the successful pet addition
+  pm.test('Pet added successfully', function () {
+    pm.expect(res.status).to.equal(200);
+  });
+
+  // POST Request - upload the image
+  pm.sendRequest({
+    url: `https://petstore.swagger.io/v2/pet/${petId}/uploadImage`, // Endpoint to upload an image
+    method: 'POST',
+    header: {
+      'Content-Type': 'multipart/form-data'
+    },
+    body: {
+      mode: 'formdata',
+      formdata: [
+        {
+          key: 'file',
+          //change the value to the path of the image
+          value: 'path of the image',
+          type: 'file'
+        }
+      ]
+    }
+  }, function (err, res) {
+    if (err) {
+      console.error('Error uploading image:', err);
+      return;
+    }
+
+    // Expected response: Status code 200, JSON object confirming image upload
+    console.log('Image uploaded successfully:', res.json()); // Log the successful image upload
+    pm.test('Image uploaded successfully', function () {
+      pm.expect(res.status).to.equal(200);
+    });
+
+    // DELETE Request - delete the added pet
+    pm.sendRequest({
+      url: `https://petstore.swagger.io/v2/pet/${petId}`, // Endpoint to delete the pet
+      method: 'DELETE',
+      header: {
+        'Content-Type': 'application/json'
+      }
+    }, function (err, res) {
+      if (err) {
+        console.error('Error deleting pet:', err);
+        return;
+      }
+
+      // Expected response: Status code 200, indicating successful deletion
+      console.log('Pet deleted successfully:', res); // Log the successful deletion
+      pm.test('Pet deleted successfully', function () {
+        pm.expect(res.status).to.equal(200);
+      });
+    });
+  });
+});
