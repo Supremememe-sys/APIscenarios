@@ -1,5 +1,5 @@
-#Scenario 1
-#Buyer can check available pets named 'pupo' with category named 'pajaro' and place and order for a pet
+//Scenario 1
+//Buyer can check available pets named 'pupo' with category named 'pajaro' and place and order for a pet
 
 const petname = 'pupo';
 const category = 'pajaro';
