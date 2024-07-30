@@ -1,15 +1,15 @@
-#Scenario 4
-#User create + Log in + update username + log out
+//Scenario 4
+//User create + Log in + update username + log out
 
 const user = {
-  id: 0, // Unique identifier for the user
-  username: "jason", // Username for the user
-  firstName: "Jason", // First name of the user
-  lastName: "Doe", // Last name of the user
-  email: "jason.doe@example.com", // Email address of the user
-  password: "password123", // Password for the user
-  phone: "123-456-7890", // Phone number of the user
-  userStatus: 1 // Status of the user (e.g., 1 could mean active, 0 could mean inactive)
+  id: 0, 
+  username: "jason", 
+  firstName: "Jason", 
+  lastName: "Doe", 
+  email: "jason.doe@example.com", 
+  password: "password123", 
+  phone: "123-456-7890", 
+  userStatus: 1 
 };
 
 // Step 1: Create an Account
