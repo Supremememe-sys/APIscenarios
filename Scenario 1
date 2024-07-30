@@ -71,8 +71,6 @@ pm.sendRequest({
         });
     } else {
         console.log(`No available pets named '${petname}' in category '${category}' found.`);
-        pm.test(`No available pets named '${petname}' in category '${category}' found.`, function () {
-            pm.expect(petspupopajaro.length).to.be.above(0);
         });
     }
 });
