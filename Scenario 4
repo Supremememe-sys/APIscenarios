@@ -10,7 +10,7 @@ const user = {
     password: "jasonpet123",
     phone: "080-400-1234",
     userStatus: 1
-  },
+  };
 
 // Step 1: Create an Account
 pm.sendRequest({
