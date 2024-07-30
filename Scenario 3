@@ -1,5 +1,5 @@
-#Scenario 3
-#Store Owner delete the order from the first scenario 
+//Scenario 3
+//Store Owner delete the order from the first scenario 
 // Assume orderId is the one already within the system and to verify the functionality of delete API
 const orderId = 1234567890;
 
