@@ -1,5 +1,5 @@
-#Scenario 5
-#Create a list of user and then delete
+//Scenario 5
+//Create a list of user and then delete
 const users = [
   {
     id: 1,
