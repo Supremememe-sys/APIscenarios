@@ -1,6 +1,6 @@
-#Scenario 6
-#Add new pet named 'cute' and category named 'gelato' to the store and then upload image of it
-#Finally, delete this pet information
+//Scenario 6
+//Add new pet named 'cute' and category named 'gelato' to the store and then upload image of it
+//Finally, delete this pet information
 
 const pet = {
   id: 0,
