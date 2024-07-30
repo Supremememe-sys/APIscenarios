@@ -1,10 +1,10 @@
 #Scenario 1
-#Buyer Can check available pets named 'pupo' with category named 'pajaro' and place and order for a pet
+#Buyer can check available pets named 'pupo' with category named 'pajaro' and place and order for a pet
 
-const petNameToFind = 'pupo';
-const categoryToFind = 'pajaro';
+const petname = 'pupo';
+const category = 'pajaro';
 
-// Send a GET request to fetch available pets
+// Send a GET request to find the target pet
 pm.sendRequest({
     url: 'https://petstore.swagger.io/v2/pet/findByStatus',
     method: 'GET',
@@ -24,17 +24,17 @@ pm.sendRequest({
     const response = res.json();
 
     // Filter the response to find pets with the specified name and category
-    const petsNamedPupoInCategoryPajaro = response.filter(pet => 
-        pet.name.toLowerCase() === petNameToFind.toLowerCase() && 
-        pet.category.name.toLowerCase() === categoryToFind.toLowerCase()
+    const petspupopajaro = response.filter(pet => 
+        pet.name.toLowerCase() === petname.toLowerCase() && 
+        pet.category.name.toLowerCase() === category.toLowerCase()
     );
 
     // Log the filtered pets to the Postman console
-    console.log(`Available pets named '${petNameToFind}' in category '${categoryToFind}':`, petsNamedPupoInCategoryPajaro);
+    console.log(`Available pets named '${petname}' in category '${category}':`, petspupopajaro);
 
     // Check if any pets were found
-    if (petsNamedPupoInCategoryPajaro.length > 0) {
-        petsNamedPupoInCategoryPajaro.forEach(pet => {
+    if (petspupopajaro.length > 0) {
+        petspupopajaro.forEach(pet => {
             const petId = pet.id;
 
             // Define the order object
@@ -70,9 +70,9 @@ pm.sendRequest({
             });
         });
     } else {
-        console.log(`No available pets named '${petNameToFind}' in category '${categoryToFind}' found.`);
-        pm.test(`No available pets named '${petNameToFind}' in category '${categoryToFind}' found.`, function () {
-            pm.expect(petsNamedPupoInCategoryPajaro.length).to.be.above(0);
+        console.log(`No available pets named '${petname}' in category '${category}' found.`);
+        pm.test(`No available pets named '${petname}' in category '${category}' found.`, function () {
+            pm.expect(petspupopajaro.length).to.be.above(0);
         });
     }
 });
